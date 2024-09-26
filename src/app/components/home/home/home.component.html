@@ -1,0 +1,63 @@
+<div class="container mt-5">
+  <div class="card">
+    <form [formGroup]="getWeatherForm">
+      <div class="form-group">
+        <label for="Name">Name</label>
+        <input type="text" formControlName="name" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label for="q">Location</label>
+        <input type="text" formControlName="q" class="form-control" />
+      </div>
+      <button class="btn btn-primary" (click)="getInfo()">Get weather!</button>
+    </form>
+  </div>
+</div>
+
+@if(locationData){
+<div class="container mt-4">
+  <div class="card mb-4">
+    <div class="card-body">
+      <h2 class="card-title h4">
+        Hi {{ getWeatherForm.get("name")?.value }}! weather in
+        {{ locationData.location.name }}
+      </h2>
+      <h6 class="card-subtitle mb-2 text-muted">
+        {{ locationData.location.region }}, {{ locationData.location.country }}
+      </h6>
+      <p class="card-text">As of {{ locationData.location.localtime }}</p>
+      <div class="d-flex align-items-center mt-3">
+        <img
+          [src]="locationData.current.condition.icon"
+          [alt]="locationData.current.condition.text"
+          class="me-2"
+        />
+        <span>{{ locationData.current.condition.text }}</span>
+      </div>
+      <div class="d-flex align-items-center mt-2">
+        <i class="bi bi-thermometer me-2"></i>
+        <span>{{ locationData.current.temp_c }}°C</span>
+      </div>
+    </div>
+  </div>
+  @if(weatherMetrics && weatherMetrics.length>0){
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" *ngFor="let metric of weatherMetrics">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title d-flex align-items-center">
+            <i class="bi {{ metric.icon }} me-2"></i>
+            {{ metric.label }}
+          </h5>
+          <p class="card-text">{{ metric.value }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>
+}
+
+@else {
+  {{showErrorMessage}}
+}
